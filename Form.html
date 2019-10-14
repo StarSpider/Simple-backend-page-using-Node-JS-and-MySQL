@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="formHolder">
+        <form id="0" action="#">
+          <!-- Navbar -->
+
+          <nav class="navbar navbar-light bg-light">
+            <span class="navbar-brand mb-0 h1">Navbar</span>
+            <input
+              type="Numbers"
+              class="input-group-text"
+              required
+              id="hours"
+            />
+            <input type="date" class="input-group-text" required id="date" />
+          </nav>
+          <!-- Navbar -->
+          <!-- Text area -->
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Comments</span>
+            </div>
+            <textarea
+              id="comments"
+              required
+              class="form-control"
+              aria-label="With textarea"
+              placeholder="Comments..."
+            ></textarea>
+
+            <!-- <div id="newForm"></div> -->
+            <!-- Text area -->
+          </div>
+        </form>
+      </div>
+      <footer>
+        <button id="add" class="btn btn-dark" onclick="addMore()">
+          Add More
+        </button>
+        <button id="submit" class="btn btn-dark" onclick="submit()">
+          Submit
+        </button>
+      </footer>
+    </div>
+    <script>
+      let count = 1;
+      const addMore = () => {
+        let element = document.getElementById("formHolder");
+
+        let str = `<form id=${count++} action="#">
+        <!-- Navbar -->
+        <nav class="navbar navbar-light bg-light">
+          <span class="navbar-brand mb-0 h1">Navbar</span>
+          <input type="Numbers" class="input-group-text" required name="hours" />
+          <input type="date" class="input-group-text" name="date" required />
+        </nav>
+        <!-- Navbar -->
+        <!-- Text area -->
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Comments</span>
+          </div>
+          <textarea
+            name="comments"
+            required
+            class="form-control"
+            aria-label="With textarea"
+            placeholder="Comments..."
+          ></textarea>
+        </div>
+        <!-- Text area -->
+      </form>`;
+        element.innerHTML += str;
+      };
+
+      let submit = () => {
+       
+        // let countOfEle = document.getElementsByTagName("form").length; //works
+        // let element = document.getElementById("formHolder");
+        // let datum = [];
+
+        // console.log(oForm.elements["date"].value);
+
+        
+        let oForm = document.forms[0];
+        let data = {
+            date: oForm.elements["date"].value,
+            project:"",
+            hours: oForm.elements["hours"].value,
+            task: oForm.elements["comments"].value
+          };
+          console.log(data);
+
+        // for (let i = 0; i < countOfEle; i++) {
+        //   let oForm = document.forms[i];
+        //   console.log(oForm.elements["date"].value);
+
+        //   let data = {
+        //     date: oForm.elements["date"].value,
+        //     project:"",
+        //     hours: oForm.elements["hours"].value,
+        //     task: oForm.elements["comments"].value
+        //   };
+          // datum.push(data);
+        // }
+        
+        let xHttp = new XMLHttpRequest();
+        
+        xHttp.onreadystatechange = function() {
+          if ((this.readyState == 4) & (this.status == 200)) {
+            let json = JSON.parse(this.response);
+          }
+        };
+
+        xHttp.open("POST", " http://localhost:1300/posts");
+        xHttp.setRequestHeader(
+          "content-type",
+          "application/json;charset=UTF-8"
+        );
+        xHttp.send(JSON.stringify(data));
+      };
+    </script>
+  </body>
+</html>
